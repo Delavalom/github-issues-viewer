@@ -9,3 +9,21 @@ datasource db {
   url = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
+model Issue {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  content String
+  closed Boolean @default(false)
+  authorId Int
+  Comment Comment[]
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  content String
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  issueId Int @unique
+  Issue Issue @relation(fields: [issueId], references: [id])
+}
